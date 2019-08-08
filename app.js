@@ -9,12 +9,12 @@ var logger = require('morgan');
 // app.use(bodyParser.urlencoded({extended: false}))
 var app = express();
 
-var userLoginApi = require('./routes/login/userLogin');
-var adminLoginApi = require('./routes/login/adminLogin');
+var userLoginApi = require('./controllers/login/userLogin');
+var adminLoginApi = require('./controllers/login/adminLogin');
 
 
-const userManageApi = require('./routes/admin/userManage/userManage')
-const adminManageApi = require('./routes/admin/userManage/adminManage')
+const userManageApi = require('./controllers/admin/userManage/userManage')
+const adminManageApi = require('./controllers/admin/userManage/adminManage')
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
