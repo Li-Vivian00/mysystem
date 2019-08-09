@@ -1,19 +1,15 @@
-var express = require('express');
-var router = express.Router();
-var models = require('../../sqlInfo/db');
-var mysql = require('mysql');
-var $sql = require('../../sqlInfo/sqlMap');
+const express = require('express');
+const router = express.Router();
+const models = require('../../sqlInfo/db');
+const mysql = require('mysql');
+const $sql = require('../../sqlInfo/sqlMap');
 
-/* GET home page. */
-// router.get('/', function(req, res, next) {
-//   res.render('index', { title: 'Express' });
-// });
-
+const userLoginService = require('../../service/login/userLogin.service')
 // 连接数据库
-var conn = mysql.createConnection(models.mysql);
+const conn = mysql.createConnection(models.mysql);
 
 conn.connect();
-var jsonWrite = function (res, ret) {
+const jsonWrite = function (res, ret) {
   if (typeof ret === 'undefined') {
     res.json({
       code: '1',
@@ -25,41 +21,25 @@ var jsonWrite = function (res, ret) {
 };
 
 //查找用户接口
-router.post('/login', (req, res) => {
-  var selectName = $sql.userinfo.select_name;
-  var params = req.body;
-  console.log(params);
-  if (params.loginId) {
-    selectName += " where loginid ='" + params.loginId + "'";
+router.post('/login', async (req, res) => {
+  const selectName = $sql.userinfo.select_name;
+  const params = req.body;
+  try {
+    const result = await userLoginService.userLogin(selectName, params, conn)
+    jsonWrite(res, result)
+  } catch (error) {
+    console.log(error)
   }
-  conn.query(selectName, params.loginId, function (err, result) {
-    if (err) {
-      console.log(err);
-    }
-    //   console.log(JSON.stringify(result))
-    console.log(result)
-    if (result[0] === undefined || result[0] === '' || result[0] === 0) {
-      res.send('-1')
-    } else {
-      var resultArray = result[0];
-      if (resultArray.password === params.password) {
-        console.log(resultArray.password)
-        jsonWrite(res, result);
-      } else {
-        res.send('0') //wrong pwd
-      }
-    }
-  })
 });
 
-//   var dateStr = function(str) {
+//   const dateStr = function(str) {
 //     return new Date(str.slice(0,7));
 // }
 
-// 增加用户接口
+// 增加用户注册接口
 router.post('/addUser', (req, res) => {
-  var sql = $sql.userinfo.add;
-  var params = req.body;
+  const sql = $sql.userinfo.add;
+  const params = req.body;
   conn.query(sql, [params.loginId, params.name, params.pass, params.checkPass,
     params.sex, params.phone, params.email, params.card
   ], function (err, result) {
@@ -76,8 +56,8 @@ router.post('/addUser', (req, res) => {
 
 //获取用户信息
 router.get('/getUser', (req, res) => {
-  var sql_name = $sql.userinfo.select_name;
-  var params = req.query.userLoginId;
+  const sql_name = $sql.userinfo.select_name;
+  const params = req.query.userLoginId;
   sql_name += " where loginid = '" + params + "'";
   conn.query(sql_name, params, function (err, result) {
     if (err) {
@@ -93,8 +73,8 @@ router.get('/getUser', (req, res) => {
 
 //更改密码
 router.post('/modifyPassword', (req, res) => {
-  var sql_modify = $sql.user.update_user;
-  var params = req.body;
+  const sql_modify = $sql.user.update_user;
+  const params = req.body;
   console.log(params);
   if (params.id) {
     sql_modify += " password = '" + params.pass +

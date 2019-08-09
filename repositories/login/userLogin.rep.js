@@ -1,4 +1,4 @@
-const adminLogin = (selectName, params, conn) => {
+const userLogin = (selectName, params, conn) => {
     return new Promise((resolve, reject) => {
         if (params.loginId) {
             selectName += " where loginid ='" + params.loginId + "'";
@@ -14,5 +14,5 @@ const adminLogin = (selectName, params, conn) => {
 }
 
 module.exports = {
-    adminLogin
+    userLogin
 }

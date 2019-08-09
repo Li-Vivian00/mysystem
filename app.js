@@ -1,20 +1,20 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 
 // const bodyParser = require('body-parser') //post数据需要
 // app.use(bodyParser.json())
 // app.use(bodyParser.urlencoded({extended: false}))
-var app = express();
+const app = express();
 
-var userLoginApi = require('./controllers/login/userLogin');
-var adminLoginApi = require('./controllers/login/adminLogin');
+const userLoginApi = require('./controllers/login/userLogin.controller');
+const adminLoginApi = require('./controllers/login/adminLogin.controller');
 
 
-const userManageApi = require('./controllers/admin/userManage/userManage')
-const adminManageApi = require('./controllers/admin/userManage/adminManage')
+const userManageApi = require('./controllers/admin/userManage/userManage.controller')
+const adminManageApi = require('./controllers/admin/userManage/adminManage.controller')
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

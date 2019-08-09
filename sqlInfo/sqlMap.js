@@ -1,4 +1,4 @@
-var sqlMap = {
+const sqlMap = {
 
     admininfo:{
         add: 'insert into admininfo(username, password) values (?, ?)',

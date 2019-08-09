@@ -1,8 +1,8 @@
-var express = require('express');
-var router = express.Router();
-var models = require('../../../sqlInfo/db');
-var mysql = require('mysql');
-var $sql = require('../../../sqlInfo/sqlMap');
+const express = require('express');
+const router = express.Router();
+const models = require('../../../sqlInfo/db');
+const mysql = require('mysql');
+const $sql = require('../../../sqlInfo/sqlMap');
 
 
 // 连接数据库

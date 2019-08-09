@@ -4,15 +4,8 @@ const models = require('../../sqlInfo/db');
 const mysql = require('mysql');
 const $sql = require('../../sqlInfo/sqlMap');
 
-const adminLoginServer = require ('../../servers/login/adminLogin.server.js')
-// import { adminLoginServer } from "../../servers/login/adminLogin.server.js"
+const adminLoginService = require('../../service/login/adminLogin.service')
 
-
-/* GET users listing. */
-// router.get('/', function (req, res, next) {
-//   res.send('respond with a resource');
-// });
-// 连接数据库
 const conn = mysql.createConnection(models.mysql);
 
 conn.connect();
@@ -31,39 +24,12 @@ const jsonWrite = function (res, ret) {
 router.post('/adminlogin', async (req, res) => {
   const selectName = $sql.admininfo.select_name;
   const params = req.body;
-  if (params.loginId) {
-    selectName += " where loginid ='" + params.loginId + "'";
-  }
   try {
-    const resultArray = await adminLoginServer(selectName, params.loginId)
-    if (resultArray === undefined || resultArray === '' || resultArray === 0) {
-      res.send('-1')
-    } else {
-      if (resultArray.password === params.password) {
-        jsonWrite(res, result);
-      } else {
-        res.send('0')
-      }
-    }
+    const result = await adminLoginService.adminLogin(selectName,params, conn)
+    jsonWrite(res, result)
   } catch (error) {
-
+    console.log(error)
   }
-
-  // conn.query(selectName, params.loginId, function (err, result) {
-  //   if (err) {
-  //     console.log(err);
-  //   }
-  //   if (result[0] === undefined || result[0] === '' || result[0] === 0) {
-  //     res.send('-1')
-  //   } else {
-  //     const resultArray = result[0];
-  //     if (resultArray.password === params.password) {
-  //       jsonWrite(res, result);
-  //     } else {
-  //       res.send('0') 
-  //     }
-  //   }
-  // })
 });
 
 //获取管理员信息
@@ -85,22 +51,6 @@ router.get('/getAdminInfo', (req, res) => {
 });
 
 
-
-// 增加用户接口
-router.post('/addUser', (req, res) => {
-  const sql = $sql.admininfo.add;
-  const params = req.body;
-  conn.query(sql, [params.username, params.password], function (err, result) {
-    if (err) {
-      console.log(err);
-    }
-    if (result) {
-      // console.log(result)
-      jsonWrite(res, result);
-    }
-  })
-});
-
 //更改密码
 router.post('/modifyPassword', (req, res) => {
   const sql_modify = $sql.admininfo.update_user;
@@ -116,7 +66,7 @@ router.post('/modifyPassword', (req, res) => {
     }
     console.log(result);
     if (result.affectedRows === undefined || result.affectedRows === '' || result.affectedRows === 0) {
-      res.send('修改密码失败，请联系管理员')   //查询不出username，data 返回-1
+      res.send('修改密码失败，请联系管理员') //查询不出username，data 返回-1
     } else {
       res.send('ok');
     }

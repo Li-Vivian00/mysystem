@@ -1,13 +1,13 @@
-var express = require('express');
-var router = express.Router();
-var models = require('../../../sqlInfo/db');
-var mysql = require('mysql');
-var $sql = require('../../../sqlInfo/sqlMap');
+const express = require('express');
+const router = express.Router();
+const models = require('../../../sqlInfo/db');
+const mysql = require('mysql');
+const $sql = require('../../../sqlInfo/sqlMap');
 // 连接数据库
-var conn = mysql.createConnection(models.mysql);
+const conn = mysql.createConnection(models.mysql);
 
 conn.connect();
-var jsonWrite = function (res, ret) {
+const jsonWrite = function (res, ret) {
     if (typeof ret === 'undefined') {
         res.json({
             code: '1',
@@ -20,8 +20,8 @@ var jsonWrite = function (res, ret) {
 
 // 增加用户接口
 router.post('/addUser', (req, res) => {
-    var sql = $sql.user.add;
-    var params = req.body;
+    const sql = $sql.user.add;
+    const params = req.body;
     conn.query(sql, [params.username, params.password], function (err, result) {
         if (err) {
             console.log(err);
@@ -35,8 +35,8 @@ router.post('/addUser', (req, res) => {
 
 //查找用户接口
 router.post('/login', (req, res) => {
-    var selectName = $sql.user.selectName;
-    var params = req.body;
+    const selectName = $sql.user.selectName;
+    const params = req.body;
     console.log(params);
     if (params.username) {
         selectName += " where username ='" + params.username + "'";
@@ -50,7 +50,7 @@ router.post('/login', (req, res) => {
         if (result[0] === undefined) {
             res.send('-1') //查询不出username，data 返回-1
         } else {
-            var resultArray = result[0];
+            const resultArray = result[0];
             console.log(resultArray.password);
             if (resultArray.password === params.password) {
                 jsonWrite(res, result);
@@ -63,9 +63,9 @@ router.post('/login', (req, res) => {
 
 //获取用户信息
 router.post('/getUser', (req, res) => {
-    var selectName = $sql.user.selectName;
-    // var sql_password = $sql.user.select_password;
-    var params = req.body;
+    const selectName = $sql.user.selectName;
+    // const sql_password = $sql.user.select_password;
+    const params = req.body;
     console.log(params);
     if (params.username) {
         selectName += " where username ='" + params.username + "'";
@@ -86,8 +86,8 @@ router.post('/getUser', (req, res) => {
 
 //更新用户信息
 router.post('/updateUser', (req, res) => {
-    var updateUser = $sql.user.updateUser;
-    var params = req.body;
+    const updateUser = $sql.user.updateUser;
+    const params = req.body;
     console.log(params);
     if (params.id) {
         updateUser += " username = '" + params.username +
@@ -108,8 +108,8 @@ router.post('/updateUser', (req, res) => {
 
 //更改密码
 router.post('/modifyPassword', (req, res) => {
-    var sql_modify = $sql.user.updateUser;
-    var params = req.body;
+    const sql_modify = $sql.user.updateUser;
+    const params = req.body;
     console.log(params);
     if (params.id) {
         sql_modify += " password = '" + params.password +
@@ -130,8 +130,8 @@ router.post('/modifyPassword', (req, res) => {
 
 //删除用户
 router.post('/deleteUser', (req, res) => {
-    var sqlDelete = $sql.user.deleteUser;
-    var params = req.body;
+    const sqlDelete = $sql.user.deleteUser;
+    const params = req.body;
     console.log(params.id)
     conn.query(sqlDelete, params.id, function (err, result) {
         if (err) {
