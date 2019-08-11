@@ -51,7 +51,6 @@ router.get('/getOneUser', async (req, res) => {
 router.post('/updateUser', async (req, res) => {
   const updateUser = $sql.userinfo.update_user;
   const params = req.body;
-
   try {
     const result = await userManageService.updateUser(updateUser, params, conn);
     jsonWrite(res, result)
