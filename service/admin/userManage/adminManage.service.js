@@ -24,7 +24,7 @@ const getOneAdminInfo = async (selectName, id, name, conn) => {
 const updateAdmin = async (updateUser,params, conn) => {
     const result = await adminManageRep.updateAdmin(updateUser,params, conn)
     if (result.affectedRows === undefined || result.affectedRows === '' || result.affectedRows === 0) {
-        return '更新失败，请联系管理员'
+        return '更新用户失败'
     } else {
         return result
     }

@@ -97,7 +97,6 @@ router.post('/updateUser', (req, res) => {
         if (err) {
             console.log(err);
         }
-        console.log(result);
         if (result.affectedRows === undefined || result.affectedRows === '' || result.affectedRows === 0) {
             res.send('更新失败，请联系管理员') //查询不出username，data 返回-1
         } else {
@@ -110,7 +109,6 @@ router.post('/updateUser', (req, res) => {
 router.post('/modifyPassword', (req, res) => {
     const sql_modify = $sql.user.updateUser;
     const params = req.body;
-    console.log(params);
     if (params.id) {
         sql_modify += " password = '" + params.password +
             "' where id ='" + params.id + "'";
@@ -119,7 +117,6 @@ router.post('/modifyPassword', (req, res) => {
         if (err) {
             console.log(err);
         }
-        console.log(result);
         if (result.affectedRows === undefined || result.affectedRows === '' || result.affectedRows === 0) {
             res.send('修改密码失败，请联系管理员') //查询不出username，data 返回-1
         } else {
@@ -132,17 +129,10 @@ router.post('/modifyPassword', (req, res) => {
 router.post('/deleteUser', (req, res) => {
     const sqlDelete = $sql.user.deleteUser;
     const params = req.body;
-    console.log(params.id)
     conn.query(sqlDelete, params.id, function (err, result) {
         if (err) {
             console.log(err);
         }
-        console.log(result);
-        // if (result) {
-        //   jsonWrite(res, result);
-        // } else {
-        //   res.send('删除用户失败')
-        // }
         if (result.affectedRows === undefined || result.affectedRows === '' || result.affectedRows === 0) {
             res.send('删除用户失败') //查询不出username，data 返回-1
         } else {
