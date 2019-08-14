@@ -13,7 +13,7 @@ const getAllUserInfo = (selectName, params, conn) => {
 const getOneUserInfo = (selectName, id, name, conn) => {
     return new Promise((resolve, reject) => {
         if (id) {
-            selectName += " where " + id + " = " + name
+            selectName += " where " + id + " = " + "'" + name + "'"
         }
         conn.query(selectName, [id, name], function (error, result) {
             if (error) {

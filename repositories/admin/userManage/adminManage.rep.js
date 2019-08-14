@@ -14,8 +14,9 @@ const getAllAdminInfo = (selectName, params, conn) => {
 const getOneAdminInfo = (selectName, id, name, conn) => {
     return new Promise((resolve, reject) => {
         if (id) {
-            selectName += " where " + id + " = " + name
+            selectName += " where " + id + " = " + "'" + name + "'"
         }
+        console.log(selectName)
         conn.query(selectName, [id, name], (error, result) => {
             if (error) {
                 return reject(error)
