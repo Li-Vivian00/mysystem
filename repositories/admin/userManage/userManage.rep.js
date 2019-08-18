@@ -27,10 +27,10 @@ const getOneUserInfo = (selectName, id, name, conn) => {
 
 const deleteUser = (sqlDelete, params, conn) => {
     return new Promise((resolve, reject) => {
-        if (params.id) {
-            sqlDelete += "where id  in (" + params.id + ")"
+        if (params.Id) {
+            sqlDelete += "where id  in (" + params.Id + ")"
         }
-        conn.query(sqlDelete, params.id, function (error, result) {
+        conn.query(sqlDelete, params.Id, function (error, result) {
             if (error) {
                 return reject(error)
             } else {

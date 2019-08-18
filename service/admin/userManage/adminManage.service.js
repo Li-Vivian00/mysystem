@@ -5,7 +5,7 @@ const getAllAdminInfo = async (selectName, params, conn) => {
     const result = await adminManageRep.getAllAdminInfo(selectName, params, conn)
     const resultArray = result[0]
     if (resultArray === undefined) {
-        return '获取用户信息失败'
+        return 'fail to get user info'
     } else {
         return result
     }
@@ -15,7 +15,7 @@ const getOneAdminInfo = async (selectName, id, name, conn) => {
     const result = await adminManageRep.getOneAdminInfo(selectName, id, name, conn)
     const resultArray = result[0]
     if (resultArray === undefined || resultArray === '' || resultArray === null || result[0] === []) {
-        return "无该用户信息"
+        return "fail to get user info"
     } else {
         return result
     }
@@ -24,7 +24,7 @@ const getOneAdminInfo = async (selectName, id, name, conn) => {
 const updateAdmin = async (updateUser,params, conn) => {
     const result = await adminManageRep.updateAdmin(updateUser,params, conn)
     if (result.affectedRows === undefined || result.affectedRows === '' || result.affectedRows === 0) {
-        return '更新用户失败'
+        return 'fail to update user info'
     } else {
         return result
     }
@@ -33,7 +33,7 @@ const updateAdmin = async (updateUser,params, conn) => {
 const deleteAdmin = async (sqlDelete,params, conn) => {
     const result = await adminManageRep.deleteAdmin(sqlDelete,params, conn)
     if (result.affectedRows === undefined || result.affectedRows === '' || result.affectedRows === 0) {
-        return '删除用户失败'
+        return 'fail to delete user'
     } else {
         return result
     }

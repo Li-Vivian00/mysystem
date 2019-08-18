@@ -25,52 +25,55 @@ router.post('/adminlogin', async (req, res) => {
   const selectName = $sql.admininfo.select_name;
   const params = req.body;
   try {
-    const result = await adminLoginService.adminLogin(selectName,params, conn)
+    const result = await adminLoginService.adminLogin(selectName, params, conn)
     jsonWrite(res, result)
   } catch (error) {
     console.log(error)
   }
 });
 
-//获取管理员信息
-router.get('/getAdminInfo', (req, res) => {
-  const sql_name = $sql.admininfo.select_name;
-  const params = req.query.name;
-  sql_name += " where loginid = '" + params + "'";
-  conn.query(sql_name, params, function (err, result) {
-    if (err) {
-      console.log(err);
-    }
-    console.log(result);
-    if (result === undefined || result === '' || result === 0) {
-      res.send('-1')
-    } else {
-      jsonWrite(res, result);
-    }
-  })
+//获取登录管理员信息
+router.get('/getAdminInfo', async (req, res) => {
+  const selectName = $sql.admininfo.select_name;
+  const params = req.query.adminLoginId;
+  console.log(params)
+  try {
+    const result = await adminLoginService.getAdminInfo(selectName, params, conn)
+    console.log(result)
+    jsonWrite(res, result)
+  } catch (error) {
+    console.log(error)
+  }
+
 });
 
 
 //更改密码
-router.post('/modifyPassword', (req, res) => {
-  const sql_modify = $sql.admininfo.update_user;
+router.post('/modifyPassword', async  (req, res) => {
+  const sql_modify = $sql.admininfo.update_admin;
   const params = req.body;
-  console.log(params);
-  if (params.id) {
-    sql_modify += " password = '" + params.password +
-      "' where id ='" + params.id + "'";
+  try {
+    const result =  await adminLoginService.modifyPassword(sql_modify, params, conn)
+    console.log(result)
+    jsonWrite(res, result)
+  } catch (error) {
+    console.log(error)
   }
-  conn.query(sql_modify, params.id, function (err, result) {
-    if (err) {
-      console.log(err);
-    }
-    console.log(result);
-    if (result.affectedRows === undefined || result.affectedRows === '' || result.affectedRows === 0) {
-      res.send('修改密码失败，请联系管理员') //查询不出username，data 返回-1
-    } else {
-      res.send('ok');
-    }
-  })
+
+});
+
+//验证是否已存在phone
+router.get('/getAdminPhone', async (req, res) => {
+  const selectName = $sql.admininfo.select_name;
+  const params = req.query;
+  console.log(params)
+  try {
+    const result = await adminLoginService.getAdminPhone(selectName, params, conn)
+    console.log(result)
+    jsonWrite(res, result)
+  } catch (error) {
+    console.log(error)
+  }
 });
 
 module.exports = router;

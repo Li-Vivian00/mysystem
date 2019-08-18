@@ -46,10 +46,10 @@ const updateAdmin = (updateUser, params, conn) => {
 
 const deleteAdmin = (sqlDelete,params, conn) => {
     return new Promise((resolve, reject) => {
-        if (params.id) {
-            sqlDelete += "where id in (" + params.id + ")"
+        if (params.Id) {
+            sqlDelete += "where id in (" + params.Id + ")"
         }
-        conn.query(sqlDelete, params.id, (error, result) => {
+        conn.query(sqlDelete, params.Id, (error, result) => {
             if (error) {
                 return reject(error)
             }

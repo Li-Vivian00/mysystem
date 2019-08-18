@@ -11,7 +11,7 @@ const sqlMap = {
     },
     userinfo: {
         select_name: 'select * from userinfo',
-        add: 'insert into userinfo (loginid, username, password, repeatpass, sex, phone, email, card) values (?,?,?,?,?,?,?,?)',
+        add: 'insert into userinfo (loginid, username, password, repeatpass, sex, phone, email, card, login_id) values (?,?,?,?,?,?,?,?,?)',
         update_user: 'update userinfo set'
     }
 }

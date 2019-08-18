@@ -37,60 +37,56 @@ router.post('/login', async (req, res) => {
 // }
 
 // 增加用户注册接口
-router.post('/addUser', (req, res) => {
+router.post('/addUser', async (req, res) => {
   const sql = $sql.userinfo.add;
   const params = req.body;
-  conn.query(sql, [params.loginId, params.name, params.pass, params.checkPass,
-    params.sex, params.phone, params.email, params.card
-  ], function (err, result) {
-    if (err) {
-      console.log(err);
-    }
-    if (result === undefined || result === '' || result === 0) {
-      res.send('注册失败')
-    } else {
-      jsonWrite(res, result);
-    }
-  })
+  console.log(params)
+  try {
+    const result = await userLoginService.addUser(sql, params, conn)
+    jsonWrite(res, result);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
-//获取用户信息
-router.get('/getUser', (req, res) => {
-  const sql_name = $sql.userinfo.select_name;
-  const params = req.query.userLoginId;
-  sql_name += " where loginid = '" + params + "'";
-  conn.query(sql_name, params, function (err, result) {
-    if (err) {
-      console.log(err);
-    }
-    if (result === undefined || result === '' || result === 0) {
-      res.send('-1')
-    } else {
-      jsonWrite(res, result);
-    }
-  })
+//验证是否已存在loginid
+router.get('/getUserLoginid', async (req, res) => {
+  const selectName = $sql.userinfo.select_name;
+  const params = req.query;
+  console.log(params)
+  try {
+    const result = await userLoginService.getUserLoginid(selectName, params, conn)
+    console.log(result)
+    jsonWrite(res, result)
+  } catch (error) {
+    console.log(error)
+  }
+});
+
+//验证是否已存在phone
+router.get('/getUserPhone', async (req, res) => {
+  const selectName = $sql.userinfo.select_name;
+  const params = req.query;
+  console.log(params)
+  try {
+    const result = await userLoginService.getUserPhone(selectName, params, conn)
+    console.log(result)
+    jsonWrite(res, result)
+  } catch (error) {
+    console.log(error)
+  }
 });
 
 //更改密码
-router.post('/modifyPassword', (req, res) => {
-  const sql_modify = $sql.user.update_user;
+router.post('/modifyPassword', async (req, res) => {
+  const sql_modify = $sql.userinfo.update_user;
   const params = req.body;
-  console.log(params);
-  if (params.id) {
-    sql_modify += " password = '" + params.pass +
-      "',repeatPass = '" + params.checkPass +
-      "' where id ='" + params.id + "'";
+  try {
+    const result =  await userLoginService.modifyPassword(sql_modify, params, conn)
+    console.log(result)
+    jsonWrite(res, result)
+  } catch (error) {
+    console.log(error)
   }
-  conn.query(sql_modify, params.id, function (err, result) {
-    if (err) {
-      console.log(err);
-    }
-    console.log(result);
-    if (result.affectedRows === undefined || result.affectedRows === '' || result.affectedRows === 0) {
-      res.send('-1') //查询不出username，data 返回-1
-    } else {
-      res.send('ok');
-    }
-  })
 });
 module.exports = router;
